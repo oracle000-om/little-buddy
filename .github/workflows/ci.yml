@@ -1,0 +1,36 @@
+# Little Buddy Club — CI Pipeline
+#
+# Runs build check on every push and PR to main/staging.
+# Prevents broken builds from deploying to Railway.
+
+name: CI
+
+on:
+  push:
+    branches: [main, staging]
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+  pull_request:
+    branches: [main, staging]
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+
+# Cancel in-progress CI runs on the same branch
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      - name: Type check + build
+        run: npm run build
+        env:
+          DATABASE_URL: "postgresql://placeholder:placeholder@localhost:5432/placeholder"

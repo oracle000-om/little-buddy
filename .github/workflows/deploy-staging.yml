@@ -1,0 +1,37 @@
+# Little Buddy Club — Staging Deploy
+#
+# Deploys to the staging Railway service on every push to the `staging` branch.
+#
+# Prerequisites:
+#   1. Create a GitHub environment called "staging"
+#   2. Add these secrets to the staging environment:
+#      - RAILWAY_TOKEN    — Railway project token for staging service
+#      - RAILWAY_SERVICE  — Railway service ID for staging
+
+name: Deploy Staging
+
+on:
+  push:
+    branches: [staging]
+
+# Prevent overlapping staging deploys
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: staging
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy to staging
+        run: railway up --service ${{ secrets.RAILWAY_SERVICE }} --detach
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}

@@ -1,50 +1,74 @@
 /* ============================================
    LITTLE BUDDY CLUB — Design System
+   Youthful · Mature · Compassionate · Informed
    ============================================ */
 
 /* --- Fonts --- */
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap');
+
+/* --- Staging Banner --- */
+.staging-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: #E65100;
+  color: #fff;
+  text-align: center;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 0;
+}
+
+/* Push sticky header below the staging banner when present */
+body:has(.staging-banner) .header {
+  top: 26px;
+}
 
 /* --- CSS Variables --- */
 :root {
-  /* Colors — light, playful, pastel palette */
-  --color-bg: #F7FAFA;
-  --color-bg-raised: #EEF6F6;
-  --color-bg-card: #FFFFFF;
-  --color-bg-card-hover: #F0F7F7;
-  --color-surface: #F4FAFA;
+  /* Colors — warm, grounded, compassionate palette */
+  --color-bg: #FAF8F4;
+  --color-bg-raised: #F0EDE7;
+  --color-bg-card: #FFFEFA;
+  --color-bg-card-hover: #F7F4EE;
+  --color-surface: #F5F2EC;
 
-  --color-text: #2B3A3D;
-  --color-text-muted: #6B8187;
-  --color-text-dim: #99AEB4;
+  --color-text: #2C2521;
+  --color-text-muted: #6B5F56;
+  --color-text-dim: #9C918A;
 
-  --color-primary: #4A9CA8;
-  --color-primary-light: #6BC5B8;
-  --color-primary-dark: #3A7D87;
-  --color-primary-glow: rgba(74, 156, 168, 0.12);
+  --color-primary: #2D7A86;
+  --color-primary-light: #3D9DAC;
+  --color-primary-dark: #1E5A64;
+  --color-primary-glow: rgba(45, 122, 134, 0.1);
 
-  --color-accent: #FF8C69;
-  --color-accent-light: #FFA98E;
-  --color-accent-glow: rgba(255, 140, 105, 0.12);
+  --color-accent: #C97D4E;
+  --color-accent-light: #DDA070;
+  --color-accent-glow: rgba(201, 125, 78, 0.1);
 
-  --color-mint: #4ECDC4;
-  --color-mint-light: #7ED6C9;
-  --color-mint-bg: rgba(78, 205, 196, 0.1);
+  --color-mint: #3AAFA9;
+  --color-mint-light: #5EC4BF;
+  --color-mint-bg: rgba(58, 175, 169, 0.08);
 
-  --color-coral: #FF8C69;
-  --color-lavender: #B8A9E8;
-  --color-sky: #87CEEB;
-  --color-sunny: #FFE066;
+  --color-coral: #C97D4E;
+  --color-lavender: #8B7DB8;
+  --color-sky: #6BA3C2;
+  --color-sunny: #D4A838;
 
   /* Status colors */
-  --color-rescue: #4ECDC4;
-  --color-rescue-bg: rgba(78, 205, 196, 0.12);
-  --color-stray: #87CEEB;
-  --color-stray-bg: rgba(135, 206, 235, 0.12);
-  --color-healing: #FFE066;
-  --color-healing-bg: rgba(255, 224, 102, 0.15);
-  --color-transfer: #B8A9E8;
-  --color-transfer-bg: rgba(184, 169, 232, 0.12);
+  --color-rescue: #3AAFA9;
+  --color-rescue-bg: rgba(58, 175, 169, 0.1);
+  --color-stray: #6BA3C2;
+  --color-stray-bg: rgba(107, 163, 194, 0.1);
+  --color-healing: #D4A838;
+  --color-healing-bg: rgba(212, 168, 56, 0.1);
+  --color-transfer: #8B7DB8;
+  --color-transfer-bg: rgba(139, 125, 184, 0.1);
 
   /* Spacing */
   --space-xs: 0.25rem;
@@ -56,7 +80,8 @@
   --space-3xl: 4rem;
 
   /* Typography */
-  --font-sans: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'DM Serif Display', Georgia, serif;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -70,16 +95,16 @@
   /* Border */
   --radius-sm: 8px;
   --radius-md: 12px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
   --radius-full: 9999px;
-  --border-subtle: 1px solid rgba(74, 156, 168, 0.1);
-  --border-card: 1px solid rgba(74, 156, 168, 0.08);
+  --border-subtle: 1px solid rgba(30, 35, 40, 0.06);
+  --border-card: 1px solid rgba(30, 35, 40, 0.05);
 
   /* Shadows */
-  --shadow-card: 0 2px 12px rgba(43, 58, 61, 0.06);
-  --shadow-hover: 0 8px 32px rgba(43, 58, 61, 0.1);
-  --shadow-soft: 0 1px 4px rgba(43, 58, 61, 0.04);
+  --shadow-card: 0 1px 3px rgba(30, 35, 40, 0.04), 0 4px 12px rgba(30, 35, 40, 0.03);
+  --shadow-hover: 0 4px 16px rgba(30, 35, 40, 0.08), 0 12px 40px rgba(30, 35, 40, 0.06);
+  --shadow-soft: 0 1px 2px rgba(30, 35, 40, 0.03);
 
   /* Transitions */
   --transition-fast: 150ms ease;
@@ -143,7 +168,7 @@ img {
   top: 0;
   z-index: 100;
   height: var(--header-height);
-  background: rgba(247, 250, 250, 0.92);
+  background: rgba(250, 248, 244, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: var(--border-subtle);
@@ -170,9 +195,9 @@ img {
 }
 
 .header__logo-text {
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-size: var(--font-size-2xl);
-  font-weight: 800;
+  font-weight: 400;
   color: var(--color-primary);
   letter-spacing: -0.01em;
 }
@@ -202,6 +227,89 @@ img {
   color: var(--color-primary);
 }
 
+/* Hidden checkbox for mobile toggle */
+.header__nav-toggle {
+  display: none;
+}
+
+/* Hamburger icon — hidden on desktop */
+.header__hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: var(--space-sm);
+  z-index: 110;
+}
+
+.header__hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--color-text);
+  border-radius: 2px;
+  transition: var(--transition-base);
+}
+
+/* Mobile nav */
+@media (max-width: 768px) {
+  .header__hamburger {
+    display: flex;
+  }
+
+  .header__nav {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: rgba(250, 248, 244, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: var(--border-subtle);
+    padding: var(--space-md) 0;
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform var(--transition-base), opacity var(--transition-base);
+  }
+
+  .header__nav-toggle:checked~nav .header__nav {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .header__nav li {
+    width: 100%;
+  }
+
+  .header__nav a {
+    display: block;
+    padding: var(--space-md) var(--space-lg);
+    font-size: var(--font-size-base);
+    border-bottom: 1px solid rgba(30, 35, 40, 0.04);
+  }
+
+  .header__nav a:hover {
+    background: var(--color-bg-raised);
+  }
+
+  /* Animate hamburger to X when open */
+  .header__nav-toggle:checked~.header__hamburger span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .header__nav-toggle:checked~.header__hamburger span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .header__nav-toggle:checked~.header__hamburger span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+}
+
 /* --- Footer --- */
 .footer {
   margin-top: var(--space-3xl);
@@ -213,8 +321,9 @@ img {
 }
 
 .footer__tagline {
+  font-family: var(--font-display);
   font-size: var(--font-size-lg);
-  font-weight: 700;
+  font-weight: 400;
   color: var(--color-primary);
   margin-bottom: var(--space-sm);
 }
@@ -237,13 +346,27 @@ img {
 
 /* --- Loading animation --- */
 @keyframes pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 @keyframes bounce-in {
-  0% { transform: scale(0.95); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* --- Mobile --- */
