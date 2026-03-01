@@ -530,17 +530,6 @@ enum RunStatus {
   FAILED
 }
 
-enum DataSource {
-  USDA_APHIS
-  MO_STATE
-  PA_STATE
-  IA_STATE
-  OH_STATE
-  KS_STATE
-  CURATED
-  HORRIBLE_HUNDRED
-}
-
 model StatePolicy {
   id                    String   @id @default(uuid())
   state                 String   @unique  // 2-letter code (e.g., "TX")
@@ -635,7 +624,7 @@ model BreederInspection {
   animalCount        Int?       @map("animal_count")        // pdf_animals_total
   latitude           Float?
   longitude          Float?
-  dataSource         DataSource @default(USDA_APHIS) @map("data_source")
+  dataSource         String     @default("USDA_APHIS") @map("data_source")
   narrativeExcerpt   String?    @map("narrative_excerpt")   // violation summary text
   reportUrl          String?    @map("report_url")          // link to original report
   lastScrapedAt      DateTime   @default(now()) @map("last_scraped_at")
@@ -656,7 +645,7 @@ model BreederEnforcement {
   fineAmount      Int?       @map("fine_amount")     // in cents
   citationCodes   String[]   @default([]) @map("citation_codes")
   narrative       String?
-  dataSource      DataSource @default(USDA_APHIS) @map("data_source")
+  dataSource      String     @default("USDA_APHIS") @map("data_source")
   lastScrapedAt   DateTime   @default(now()) @map("last_scraped_at")
 
   @@unique([certNumber, actionDate, actionType])
@@ -788,18 +777,68 @@ model ConfiscationEvent {
   @@map("confiscation_events")
 }
 
-model HousingPressure {
-  id                   String   @id @default(uuid())
-  county               String
-  state                String
-  year                 Int
-  medianRent           Int?     @map("median_rent")
-  rentChangeYoY        Float?   @map("rent_change_yoy")
-  evictionRate         Float?   @map("eviction_rate")
-  shelterIntakeChange  Float?   @map("shelter_intake_change")
-  correlationScore     Float?   @map("correlation_score")
-  lastScrapedAt        DateTime @default(now()) @map("last_scraped_at")
+// ── Puppy Imports: USDA international puppy import data ──
+model PuppyImport {
+  id              String   @id @default(uuid())
+  originCountry   String   @map("origin_country")
+  entryPort       String?  @map("entry_port")
+  importerType    String?  @map("importer_type")     // BROKER, RESCUE, PERSONAL
+  dogCount        Int      @map("dog_count")
+  puppyCount      Int?     @map("puppy_count")
+  reportYear      Int      @map("report_year")
+  reportMonth     Int?     @map("report_month")
+  lastScrapedAt   DateTime @default(now()) @map("last_scraped_at")
 
-  @@unique([county, state, year])
-  @@map("housing_pressure")
+  @@unique([originCountry, reportYear, reportMonth])
+  @@index([reportYear])
+  @@map("puppy_imports")
+}
+
+// ── Cruelty Registry: aggregate counts from state registries (no PII) ──
+model CrueltyRegistryEntry {
+  id              String    @id @default(uuid())
+  state           String
+  jurisdiction    String?
+  registrySource  String    @map("registry_source")   // TN_TBI, NYC_HEALTH, etc.
+  offenseDate     DateTime? @map("offense_date")
+  offenseType     String?   @map("offense_type")      // AGGRAVATED_CRUELTY, FIGHTING, etc.
+  species         String[]  @default([])
+  registrationEnd DateTime? @map("registration_end")
+  isActive        Boolean   @default(true) @map("is_active")
+  count           Int       @default(1)
+  lastScrapedAt   DateTime  @default(now()) @map("last_scraped_at")
+
+  @@index([state])
+  @@map("cruelty_registry_entries")
+}
+
+// ── Pet Store Bans: municipal/state retail pet sale bans ──
+model PetStoreBan {
+  id              String    @id @default(uuid())
+  state           String
+  municipality    String?
+  banType         String    @map("ban_type")           // STATEWIDE, MUNICIPAL, COUNTY
+  effectiveDate   DateTime? @map("effective_date")
+  speciesCovered  String[]  @default([]) @map("species_covered")
+  sourceUrl       String?   @map("source_url")
+  lastScrapedAt   DateTime  @default(now()) @map("last_scraped_at")
+
+  @@unique([state, municipality])
+  @@index([state])
+  @@map("pet_store_bans")
+}
+
+// ── AKC Breed Rankings: annual breed popularity data ──
+model AkcBreedRanking {
+  id              String   @id @default(uuid())
+  breedName       String   @map("breed_name")
+  rank            Int
+  reportYear      Int      @map("report_year")
+  priorYearRank   Int?     @map("prior_year_rank")
+  registrations   Int?
+  lastScrapedAt   DateTime @default(now()) @map("last_scraped_at")
+
+  @@unique([breedName, reportYear])
+  @@index([reportYear])
+  @@map("akc_breed_rankings")
 }
